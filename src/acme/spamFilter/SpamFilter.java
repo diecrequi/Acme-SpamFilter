@@ -17,14 +17,13 @@ public class SpamFilter {
 	}
 
 	public Boolean checkIsNotSpam(String text) {
-		String[] textSplit = text.toLowerCase().split("\\s+");
+		String textFormatted = text.toLowerCase().replaceAll("\\s+", " ");
 		Double totalWeight = 0.;
-		for (String word : textSplit) {
-			if (spamTuples.containsKey(word)) {
-				totalWeight += spamTuples.get(word);
-			}
+		for (String spamTerm : spamTuples.keySet()) {
+		        Integer count = textFormatted.split(spamTerm, -1).length-1;
+			    totalWeight += spamTuples.get(spamTerm) * count;
 		}
-		Double spamValue = totalWeight / textSplit.length;
+		Double spamValue = totalWeight / textFormatted.split(" ").length;
 		return spamValue < spamThreshold;
 	}
 
